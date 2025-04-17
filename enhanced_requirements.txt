@@ -1,0 +1,29 @@
+# === Core Framework ===
+streamlit>=1.32       # Web interface framework
+
+# === Visualization ===
+plotly>=5.20           # Interactive charts
+pyvista>=0.44          # Simplified VTK for 3D visualization
+vtk>=9.3               # 3D rendering backend
+trimesh>=4.1           # STL/mesh file support
+
+# === Data Handling ===
+pandas>=2.2            # Tabular data management
+numpy>=1.26            # Math operations
+scipy>=1.13            # Signal processing & modeling
+
+# === Machine Learning & Analysis ===
+scikit-learn>=1.4      # ML modules (for shape/sound fitting)
+librosa>=0.10          # Spectral audio processing
+soundfile>=0.12        # WAV/FLAC reader
+
+# === PDF & Report Generation ===
+reportlab>=4.0         # PDF export engine
+
+# === CAD & Geometry (Optional, for 3D export) ===
+pythonocc-core>=7.5    # Optional: STEP/IGES solid model support
+
+# === Custom/OpenWind Backend ===
+# IMPORTANT: Ensure openwind is available via pip or use editable install from local path
+# pip install -e ../openwind-v0.11.3
+openwind               # Placeholder for your OpenWind package
