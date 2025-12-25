@@ -1,0 +1,8 @@
+openwind
+streamlit
+numpy
+matplotlib
+scipy
+pandas
+plotly
+pytest
