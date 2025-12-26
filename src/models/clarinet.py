@@ -1,37 +1,53 @@
+
 from dataclasses import dataclass, field
 from typing import List, Tuple, Dict
 import json
 
 @dataclass
 class Hole:
+    """
+    Represents a tone hole on the instrument.
+    """
     position: float  # Distance from the start of the instrument (m)
     radius: float    # Radius of the hole (m)
     chimney: float   # Height of the chimney (m)
-    label: str = ""
+    label: str = ""  # Human-readable label (e.g., "Register Key")
 
-    def to_list(self):
-        # OpenWind expects [pos, radius, chimney]
-        # Label is handled separately or ignored in basic list format,
-        # but robust implementation might need it.
-        # Based on research, list format is [pos, radius, chimney]
+    def to_list(self) -> List[float]:
+        """
+        Returns list representation [pos, radius, chimney] for OpenWind.
+        """
         return [self.position, self.radius, self.chimney]
 
 @dataclass
 class BoreSection:
+    """
+    Represents a point in the bore profile (radius at a specific position).
+    """
     position: float
     radius: float
 
 @dataclass
 class Clarinet:
+    """
+    Main data model for the Clarinet geometry.
+    Manages bore profile and tone holes.
+    """
     name: str = "Prototype Clarinet"
     bore: List[BoreSection] = field(default_factory=list)
     holes: List[Hole] = field(default_factory=list)
 
     def add_bore_point(self, position: float, radius: float):
+        """Adds a point to the bore profile and sorts by position."""
+        if radius <= 0:
+            raise ValueError("Bore radius must be positive.")
         self.bore.append(BoreSection(position, radius))
         self.bore.sort(key=lambda x: x.position)
 
     def add_hole(self, position: float, radius: float, chimney: float, label: str = ""):
+        """Adds a tone hole and sorts by position."""
+        if radius <= 0:
+            raise ValueError("Hole radius must be positive.")
         self.holes.append(Hole(position, radius, chimney, label))
         self.holes.sort(key=lambda x: x.position)
 
@@ -44,6 +60,7 @@ class Clarinet:
         return [h.to_list() for h in self.holes]
 
     def save_to_file(self, filename: str):
+        """Saves geometry to a JSON file."""
         data = {
             "name": self.name,
             "bore": [[b.position, b.radius] for b in self.bore],
@@ -54,6 +71,7 @@ class Clarinet:
 
     @classmethod
     def load_from_file(cls, filename: str):
+        """Loads geometry from a JSON file."""
         with open(filename, 'r') as f:
             data = json.load(f)
 
@@ -74,7 +92,6 @@ class Clarinet:
         inst.add_bore_point(0.6, 0.0075)
 
         # Add some dummy tone holes
-        # Positions are illustrative
         inst.add_hole(0.5, 0.002, 0.005, "Tone Hole 1")
         inst.add_hole(0.55, 0.002, 0.005, "Tone Hole 2")
         return inst
